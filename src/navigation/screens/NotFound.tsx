@@ -1,13 +1,20 @@
-import { Text, Button } from '@react-navigation/elements';
-import { StyleSheet, View } from 'react-native';
+import { Text, Button } from '@react-navigation/elements'
+import { NavigationProp, useNavigation } from '@react-navigation/native'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { StyleSheet, View } from 'react-native'
+import { MainStackParamList } from '../MainStack'
+
+type NavProp = NativeStackNavigationProp<MainStackParamList, 'NotFound'>
 
 export function NotFound() {
+  const navigation = useNavigation<NavProp>()
+
   return (
     <View style={styles.container}>
       <Text>404</Text>
-      <Button screen="HomeTabs">Go to Home</Button>
+      <Button onPress={() => navigation.navigate('Home')}>Go to Home</Button>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -17,4 +24,4 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
   },
-});
+})
