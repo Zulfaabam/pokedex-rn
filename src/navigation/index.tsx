@@ -1,73 +1,30 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStaticNavigation, StaticParamList } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Platform } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native'
+import { useAuth } from '@/context/AuthContext'
+import AuthStack from './AuthStack'
+import MainStack from './MainStack'
+import * as SplashScreen from 'expo-splash-screen'
 
-import { Explore } from './screens/Explore';
-import { Home } from './screens/Home';
-import { NotFound } from './screens/NotFound';
+SplashScreen.preventAutoHideAsync()
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
+export default function RootNavigator() {
+  const { isAuthenticated, loading } = useAuth()
 
-const HomeTabs = createBottomTabNavigator({
-  screens: {
-    Home: {
-      screen: Home,
-      options: {
-        headerShown: false,
-        tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-      },
-    },
-    Explore: {
-      screen: Explore,
-      options: {
-        headerShown: false,
-        tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-      },
-    },
-  },
-  screenOptions: {
-    headerShown: false,
-    tabBarButton: HapticTab,
-    tabBarBackground: TabBarBackground,
-    tabBarStyle: Platform.select({
-      ios: {
-        // Use a transparent background on iOS to show the blur effect
-        possition: 'absolute',
-      },
-      default: {},
-    }),
-  },
-});
+  if (loading) return null
 
-const RootStack = createNativeStackNavigator({
-  screens: {
-    HomeTabs: {
-      screen: HomeTabs,
-      options: {
-        headerShown: false,
-      },
-    },
-    NotFound: {
-      screen: NotFound,
-      options: {
-        title: '404',
-      },
-      linking: {
-        path: '*',
-      },
-    },
-  },
-});
-
-export const Navigation = createStaticNavigation(RootStack);
-
-type RootStackParamList = StaticParamList<typeof RootStack>;
-
-declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
-  }
+  return (
+    <NavigationContainer
+      onReady={() => {
+        SplashScreen.hideAsync()
+      }}
+      // linking={{
+      //     enabled: 'auto',
+      //     prefixes: [
+      //       // Change the scheme to match your app's scheme defined in app.json
+      //       'helloworld://',
+      //     ],
+      //   }}
+    >
+      {isAuthenticated ? <MainStack /> : <AuthStack />}
+    </NavigationContainer>
+  )
 }
