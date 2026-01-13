@@ -6,10 +6,14 @@ export default function Login() {
   const { login } = useAuth()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errorMsg, setErrorMsg] = useState('')
 
   const handleLogin = async () => {
     const ok = await login(email, password)
-    if (!ok) Alert.alert('Invalid credentials')
+    if (!ok)
+      setErrorMsg(
+        'Email should contains @ and password should be min 6 characters'
+      )
   }
 
   return (
@@ -29,6 +33,7 @@ export default function Login() {
           style={styles.input}
           placeholderTextColor='gray'
         />
+        <Text style={styles.errorMsg}>{errorMsg}</Text>
         <Button title='Login' onPress={handleLogin} />
       </View>
     </View>
@@ -37,20 +42,21 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   container: {
-    gap: 24,
+    gap: 40,
     minWidth: 360,
     maxWidth: 400,
     marginHorizontal: 'auto',
     paddingHorizontal: 16,
-    marginVertical: 64,
+    marginVertical: 96,
   },
   title: {
     fontSize: 36,
     fontWeight: '500',
     fontFamily: 'PocketMonk',
+    textAlign: 'center',
   },
   form: {
-    gap: 16,
+    // gap: 16,
   },
   input: {
     height: 40,
@@ -58,5 +64,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 8,
     borderRadius: 8,
+    marginBottom: 16,
+  },
+  errorMsg: {
+    color: 'red',
+    fontSize: 12,
+    minHeight: 36,
+    minWidth: 360,
+    marginBottom: 4,
   },
 })
