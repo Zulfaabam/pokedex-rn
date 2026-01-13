@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textAlign: 'center',
   },
-  list: { marginBottom: 150 },
+  list: { marginBottom: 100 },
   header: {
     position: 'relative',
     height: 100,

@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
     minWidth: 360,
     maxWidth: 400,
     marginHorizontal: 'auto',
-    paddingHorizontal: 16,
     marginVertical: 96,
   },
   title: {
@@ -55,9 +54,7 @@ const styles = StyleSheet.create({
     fontFamily: 'PocketMonk',
     textAlign: 'center',
   },
-  form: {
-    // gap: 16,
-  },
+  form: {},
   input: {
     height: 40,
     borderColor: '#ccc',
