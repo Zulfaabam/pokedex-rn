@@ -4,7 +4,7 @@
     "slug": "pokedex-rn",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "src/assets/images/icon.png",
+    "icon": "src/assets/images/pokeball.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "scheme": "pokedexrn",
@@ -26,7 +26,7 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#ffffff",
-          "image": "src/assets/images/splash-icon.png"
+          "image": "src/assets/images/pokeball.png"
         }
       ]
     ]
