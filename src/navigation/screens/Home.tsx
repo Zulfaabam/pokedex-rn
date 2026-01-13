@@ -4,7 +4,14 @@ import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { Image } from 'expo-image'
 import { useEffect, useState } from 'react'
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+  ActivityIndicator,
+  Button,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native'
 import { MainStackParamList } from '../MainStack'
 import { useAuth } from '@/context/AuthContext'
 import ListItem from '@/components/pokemon/ListItem'
@@ -23,13 +30,19 @@ export default function Home() {
     results: [],
   })
   const [refreshing, setRefreshing] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const fetchPokemon = async () => {
+  const fetchPokemon = async (isRefresh = false) => {
+    if (!isRefresh) setIsLoading(true)
+    setError(null)
     try {
       const res = await getPokemonList(50, 0)
       setPokemon(res.data)
     } catch (err) {
-      console.error(err)
+      setError('Failed to load Pokemon list')
+    } finally {
+      if (!isRefresh) setIsLoading(false)
     }
   }
 
@@ -39,7 +52,7 @@ export default function Home() {
 
   const onRefresh = async () => {
     setRefreshing(true)
-    await fetchPokemon()
+    await fetchPokemon(true)
     setRefreshing(false)
   }
 
@@ -55,33 +68,59 @@ export default function Home() {
           <Text style={styles.emailText}>{session?.email} </Text>
         </View>
       </View>
-      <FlatList
-        data={pokemon.results}
-        keyExtractor={(item) => item?.name}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-        style={styles.list}
-        renderItem={({ item }) => {
-          const number = item?.url
-            .split('/')
-            [item?.url.split('/').length - 2].padStart(4, '0')
-          return (
-            <ListItem
-              key={item.name}
-              onPress={() =>
-                navigation.navigate('PokemonDetail', { name: item.name })
-              }
-              name={item.name}
-              number={number}
-            />
-          )
-        }}
-      />
+      {isLoading ? (
+        <View style={styles.centerContainer}>
+          <ActivityIndicator size='large' color='#ee1515' />
+        </View>
+      ) : error ? (
+        <View style={styles.centerContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+          <Button
+            title='Retry'
+            onPress={() => fetchPokemon()}
+            color='#ee0044'
+          />
+        </View>
+      ) : (
+        <FlatList
+          data={pokemon.results}
+          keyExtractor={(item) => item?.name}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+          style={styles.list}
+          renderItem={({ item }) => {
+            const number = item?.url
+              .split('/')
+              [item?.url.split('/').length - 2].padStart(4, '0')
+            return (
+              <ListItem
+                key={item.name}
+                onPress={() =>
+                  navigation.navigate('PokemonDetail', { name: item.name })
+                }
+                name={item.name}
+                number={number}
+              />
+            )
+          }}
+        />
+      )}
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  centerContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+    marginTop: 16,
+  },
+  errorText: {
+    fontSize: 16,
+    marginBottom: 16,
+    textAlign: 'center',
+  },
   list: { marginBottom: 150 },
   header: {
     position: 'relative',
