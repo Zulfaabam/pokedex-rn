@@ -29,7 +29,10 @@ export default function MainStack() {
         component={PokemonDetail}
         options={{
           title: 'Pokémon Detail',
-          headerTitleStyle: { fontFamily: 'PocketMonk' },
+          headerTitleStyle: { fontFamily: 'PocketMonk', color: '#f0f0f0' },
+          headerStyle: { backgroundColor: '#ee1515' },
+          headerShadowVisible: false,
+          headerTintColor: '#f0f0f0',
         }}
       />
       <Stack.Screen name='NotFound' component={NotFound} />

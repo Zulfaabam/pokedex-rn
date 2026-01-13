@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
 import { MainStackParamList } from '../MainStack'
 import { useAuth } from '@/context/AuthContext'
+import ListItem from '@/components/pokemon/ListItem'
 
 type NavProp = NativeStackNavigationProp<MainStackParamList, 'Home'>
 
@@ -50,29 +51,29 @@ export default function Home() {
           style={styles.pokeball}
         />
         <View style={styles.headerText}>
-          <Text style={styles.helloText}>Hello! {session?.email} </Text>
+          <Text style={styles.helloText}>Hello!</Text>
+          <Text style={styles.emailText}>{session?.email} </Text>
         </View>
       </View>
       <FlatList
         data={pokemon.results}
+        keyExtractor={(item) => item?.name}
         refreshing={refreshing}
         onRefresh={onRefresh}
-        keyExtractor={(item) => item?.name}
         style={styles.list}
         renderItem={({ item }) => {
           const number = item?.url
             .split('/')
             [item?.url.split('/').length - 2].padStart(4, '0')
           return (
-            <Pressable
+            <ListItem
+              key={item.name}
               onPress={() =>
                 navigation.navigate('PokemonDetail', { name: item.name })
               }
-              style={styles.item}
-            >
-              <Text style={styles.text}>{number}</Text>
-              <Text style={styles.text}>{item?.name}</Text>
-            </Pressable>
+              name={item.name}
+              number={number}
+            />
           )
         }}
       />
@@ -82,18 +83,6 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   list: { marginBottom: 150 },
-  item: {
-    padding: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-  },
-  text: {
-    textTransform: 'capitalize',
-    fontFamily: 'PixelifySans',
-  },
   header: {
     position: 'relative',
     height: 100,
@@ -104,8 +93,6 @@ const styles = StyleSheet.create({
   },
   headerText: {
     marginLeft: 'auto',
-    flexDirection: 'row',
-    alignItems: 'center',
     gap: 4,
     marginVertical: 'auto',
     paddingRight: 8,
@@ -113,7 +100,14 @@ const styles = StyleSheet.create({
   helloText: {
     color: '#e0e0e0',
     fontFamily: 'PixelifySans',
-    fontSize: 18,
+    fontSize: 20,
+    textAlign: 'right',
+  },
+  emailText: {
+    color: '#e0e0e0',
+    fontFamily: 'PixelifySans',
+    fontSize: 16,
+    textAlign: 'right',
   },
   pokeball: {
     height: 130,
