@@ -47,6 +47,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontWeight: '500',
+    fontFamily: 'PocketMonk',
   },
   form: {
     gap: 16,

@@ -7,6 +7,8 @@ import { AuthProvider } from './context/AuthContext'
 
 export function App() {
   const [loaded] = useFonts({
+    PocketMonk: require('./assets/fonts/Pocket-Monk.otf'),
+    PixelifySans: require('./assets/fonts/PixelifySans-VariableFont_wght.ttf'),
     SpaceMono: require('./assets/fonts/SpaceMono-Regular.ttf'),
   })
 
