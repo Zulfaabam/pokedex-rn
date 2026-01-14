@@ -62,8 +62,7 @@ export default function Login() {
 const styles = StyleSheet.create({
   container: {
     gap: 40,
-    minWidth: 360,
-    maxWidth: 400,
+    width: '100%',
     height: '100%',
     paddingTop: 96,
   },
@@ -75,6 +74,9 @@ const styles = StyleSheet.create({
   },
   form: {
     paddingHorizontal: 16,
+    minWidth: 360,
+    maxWidth: 400,
+    alignSelf: 'center',
   },
   input: {
     height: 40,
