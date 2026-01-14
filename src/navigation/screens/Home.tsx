@@ -15,6 +15,8 @@ import {
 import { MainStackParamList } from '../MainStack'
 import { useAuth } from '@/context/AuthContext'
 import ListItem from '@/components/pokemon/ListItem'
+import { ThemedView } from '@/components/ThemedView'
+import { ThemedText } from '@/components/ThemedText'
 
 type NavProp = NativeStackNavigationProp<MainStackParamList, 'Home'>
 
@@ -57,7 +59,7 @@ export default function Home() {
   }
 
   return (
-    <View>
+    <ThemedView style={{ height: '100%' }}>
       <View style={styles.header}>
         <Image
           source={require('@/assets/images/pokeball.png')}
@@ -69,21 +71,26 @@ export default function Home() {
         </View>
       </View>
       {isLoading ? (
-        <View style={styles.centerContainer}>
+        <ThemedView style={styles.centerContainer}>
           <ActivityIndicator size='large' color='#ee1515' />
-        </View>
+        </ThemedView>
       ) : error ? (
-        <View style={styles.centerContainer}>
-          <Text style={styles.errorText}>{error}</Text>
+        <ThemedView style={styles.centerContainer}>
+          <ThemedText style={styles.errorText}>{error}</ThemedText>
           <Button
             title='Retry'
             onPress={() => fetchPokemon()}
             color='#ee0044'
           />
-        </View>
+        </ThemedView>
       ) : (
         <FlatList
           data={pokemon.results}
+          ListEmptyComponent={
+            <ThemedView style={styles.centerContainer}>
+              <ThemedText style={styles.emptyText}>No Pokemon found</ThemedText>
+            </ThemedView>
+          }
           keyExtractor={(item) => item?.name}
           refreshing={refreshing}
           onRefresh={onRefresh}
@@ -105,7 +112,7 @@ export default function Home() {
           }}
         />
       )}
-    </View>
+    </ThemedView>
   )
 }
 
@@ -121,7 +128,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textAlign: 'center',
   },
-  list: { marginBottom: 100 },
+  list: {},
   header: {
     position: 'relative',
     height: 100,
@@ -155,5 +162,9 @@ const styles = StyleSheet.create({
     left: -20,
     position: 'absolute',
     transform: [{ rotate: '20deg' }],
+  },
+  emptyText: {
+    textAlign: 'center',
+    fontFamily: 'PixelifySans',
   },
 })
