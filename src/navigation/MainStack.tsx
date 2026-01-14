@@ -28,7 +28,7 @@ function HomeTabs() {
           borderTopColor: '#cc0000',
         },
         tabBarActiveTintColor: '#fff',
-        tabBarInactiveTintColor: '#ffcccc',
+        tabBarInactiveTintColor: '#ffbbbb',
       }}
     >
       <Tab.Screen

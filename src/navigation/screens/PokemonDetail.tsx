@@ -1,12 +1,14 @@
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   ActivityIndicator,
+  Button,
   Image,
   ScrollView,
   StyleSheet,
   Text,
   View,
+  useColorScheme,
 } from 'react-native'
 import { MainStackParamList } from '../MainStack'
 import { getPokemonDetail } from '@/services/pokeApi'
@@ -15,25 +17,36 @@ import { Ionicons } from '@expo/vector-icons'
 import { Colors, TYPE_COLORS } from '@/constants/Colors'
 import Stats from '@/components/pokemon/Stats'
 import { getStatLabel } from '@/utils/getStatLabel'
+import { ThemedView } from '@/components/ThemedView'
+import { ThemedText } from '@/components/ThemedText'
 
 export default function PokemonDetail() {
   const { params } = useRoute<RouteProp<MainStackParamList, 'PokemonDetail'>>()
   const navigation = useNavigation()
+  const colorScheme = useColorScheme() ?? 'light'
+  const themeColors = Colors[colorScheme]
 
   const [data, setData] = useState<TPokemonDetail>()
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
 
-  useEffect(() => {
+  const fetchPokemon = useCallback(() => {
+    setLoading(true)
+    setError(false)
     getPokemonDetail(params.name)
       .then((res) => {
         setData(res.data)
         setLoading(false)
       })
       .catch((err) => {
-        console.error(err)
         setLoading(false)
+        setError(err)
       })
   }, [params.name])
+
+  useEffect(() => {
+    fetchPokemon()
+  }, [fetchPokemon])
 
   useEffect(() => {
     if (data) {
@@ -49,16 +62,20 @@ export default function PokemonDetail() {
     }
   }, [data, navigation])
 
-  if (loading || !data) {
+  if (loading) {
     return (
-      <View
-        style={[
-          styles.loadingContainer,
-          { backgroundColor: Colors.light.background },
-        ]}
-      >
-        <ActivityIndicator size='large' color={Colors.light.tint} />
-      </View>
+      <ThemedView style={[styles.loadingContainer]}>
+        <ActivityIndicator size='large' color={themeColors.tint} />
+      </ThemedView>
+    )
+  }
+
+  if (error || !data) {
+    return (
+      <ThemedView style={[styles.loadingContainer]}>
+        <ThemedText>Failed to load pokemon details</ThemedText>
+        <Button title='Retry' onPress={fetchPokemon} />
+      </ThemedView>
     )
   }
 
@@ -98,7 +115,7 @@ export default function PokemonDetail() {
         />
       </View>
 
-      <View style={[styles.body, { backgroundColor: Colors.light.background }]}>
+      <View style={[styles.body, { backgroundColor: themeColors.background }]}>
         {/* About Section */}
         <Text style={[styles.sectionTitle, { color: backgroundColor }]}>
           About
@@ -110,9 +127,9 @@ export default function PokemonDetail() {
               <Ionicons
                 name='scale-outline'
                 size={20}
-                color={Colors.light.icon}
+                color={themeColors.icon}
               />
-              <Text style={[styles.infoValue, { color: Colors.light.text }]}>
+              <Text style={[styles.infoValue, { color: themeColors.text }]}>
                 {data.weight / 10} kg
               </Text>
             </View>
@@ -120,7 +137,7 @@ export default function PokemonDetail() {
           </View>
 
           <View
-            style={[styles.divider, { backgroundColor: Colors.light.icon }]}
+            style={[styles.divider, { backgroundColor: themeColors.icon }]}
           />
 
           <View style={styles.infoItem}>
@@ -128,9 +145,9 @@ export default function PokemonDetail() {
               <Ionicons
                 name='resize-outline'
                 size={20}
-                color={Colors.light.icon}
+                color={themeColors.icon}
               />
-              <Text style={[styles.infoValue, { color: Colors.light.text }]}>
+              <Text style={[styles.infoValue, { color: themeColors.text }]}>
                 {data.height / 10} m
               </Text>
             </View>
@@ -138,7 +155,7 @@ export default function PokemonDetail() {
           </View>
 
           <View
-            style={[styles.divider, { backgroundColor: Colors.light.icon }]}
+            style={[styles.divider, { backgroundColor: themeColors.icon }]}
           />
 
           <View style={styles.infoItem}>
@@ -148,7 +165,7 @@ export default function PokemonDetail() {
                   key={index}
                   style={[
                     styles.infoValue,
-                    { color: Colors.light.text, fontSize: 12 },
+                    { color: themeColors.text, fontSize: 12 },
                   ]}
                 >
                   {a.ability.name}
@@ -186,6 +203,7 @@ export default function PokemonDetail() {
 const styles = StyleSheet.create({
   loadingContainer: {
     flex: 1,
+    gap: 8,
     justifyContent: 'center',
     alignItems: 'center',
   },

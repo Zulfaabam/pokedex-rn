@@ -1,9 +1,22 @@
-import { View, TextInput, Button, Alert, StyleSheet, Text } from 'react-native'
+import {
+  View,
+  TextInput,
+  Button,
+  Alert,
+  StyleSheet,
+  Text,
+  useColorScheme,
+} from 'react-native'
 import { useState } from 'react'
 import { useAuth } from '@/context/AuthContext'
+import { ThemedView } from '@/components/ThemedView'
+import { ThemedText } from '@/components/ThemedText'
 
 export default function Login() {
+  const theme = useColorScheme() ?? 'light'
+
   const { login } = useAuth()
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errorMsg, setErrorMsg] = useState('')
@@ -17,26 +30,32 @@ export default function Login() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Welcome to Pokedex!</Text>
-      <View style={styles.form}>
+    <ThemedView style={styles.container}>
+      <ThemedText style={styles.title}>Welcome to Pokedex!</ThemedText>
+      <ThemedView style={styles.form}>
         <TextInput
           placeholder='example@email.com'
           onChangeText={setEmail}
-          style={styles.input}
+          style={[
+            styles.input,
+            { color: theme === 'dark' ? '#f0f0f0' : '#000' },
+          ]}
           placeholderTextColor='gray'
         />
         <TextInput
           placeholder='Password min 6 characters'
           secureTextEntry
           onChangeText={setPassword}
-          style={styles.input}
+          style={[
+            styles.input,
+            { color: theme === 'dark' ? '#f0f0f0' : '#000' },
+          ]}
           placeholderTextColor='gray'
         />
         <Text style={styles.errorMsg}>{errorMsg}</Text>
         <Button title='Login' onPress={handleLogin} />
-      </View>
-    </View>
+      </ThemedView>
+    </ThemedView>
   )
 }
 
@@ -45,8 +64,8 @@ const styles = StyleSheet.create({
     gap: 40,
     minWidth: 360,
     maxWidth: 400,
-    marginHorizontal: 'auto',
-    marginVertical: 96,
+    height: '100%',
+    paddingTop: 96,
   },
   title: {
     fontSize: 36,
@@ -54,7 +73,9 @@ const styles = StyleSheet.create({
     fontFamily: 'PocketMonk',
     textAlign: 'center',
   },
-  form: {},
+  form: {
+    paddingHorizontal: 16,
+  },
   input: {
     height: 40,
     borderColor: '#ccc',

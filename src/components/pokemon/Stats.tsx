@@ -1,7 +1,8 @@
 import { Colors } from '@/constants/Colors'
 import { Stat } from '@/types/pokemon'
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, useColorScheme } from 'react-native'
+import { ThemedText } from '../ThemedText'
 
 interface StatsProps {
   stat: Stat
@@ -11,14 +12,17 @@ interface StatsProps {
 }
 
 function Stats({ stat, statName, percentage, typeColor }: StatsProps) {
+  const colorScheme = useColorScheme() ?? 'light'
+  const themeColors = Colors[colorScheme]
+
   return (
     <View key={stat.stat.name} style={styles.statRow}>
-      <Text style={[styles.statLabel, { color: Colors.light.icon }]}>
+      <Text style={[styles.statLabel, { color: themeColors.icon }]}>
         {statName}
       </Text>
-      <Text style={[styles.statValue, { color: Colors.light.text }]}>
+      <ThemedText style={[styles.statValue]}>
         {stat.base_stat.toString()}
-      </Text>
+      </ThemedText>
       <View style={styles.progressBarBackground}>
         <View
           style={[
