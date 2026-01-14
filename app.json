@@ -29,6 +29,12 @@
           "image": "src/assets/images/pokeball.png"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "967457a2-e4d3-4e21-9124-5caf615105a6"
+      }
+    },
+    "owner": "abamaru"
   }
 }
