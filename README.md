@@ -47,10 +47,14 @@ It includes the following:
 
 - In the terminal running the development server, press `i` to open the iOS simulator, `a` to open the Android device or emulator, or `w` to open the web browser.
 
+- To login to the app just use any valid email (e.g. `test@example.com`) and password with minimal 6 characters (e.g. `password`)
+
 ## Resources
 
-- [React Navigation documentation](https://reactnavigation.org/)
-- [Expo documentation](https://docs.expo.dev/)
+- [APK File](https://expo.dev/artifacts/eas/b8FxrXiy7Ws7ocwrkvAJCL.apk)
+- [APK File backup](https://drive.google.com/file/d/1v-rgeXfTY3dbgUPlLRAouG3r3SZ1cCdA/view?usp=drive_link)
+
+latest APK file update: 15 January 2026
 
 ## Author
 
